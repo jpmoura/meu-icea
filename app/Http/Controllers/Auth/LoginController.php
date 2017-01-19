@@ -73,7 +73,7 @@ class LoginController extends Controller
         $requestBody['attributes'] = ["cpf", "nomecompleto", "email", "id_grupo", "grupo"]; // Atributos que devem ser retornados em caso autenticação confirmada
 
         // Chamada de autenticação para a LDAPI
-        $httpClient = new Client();
+        $httpClient = new Client(['verify' => false]);
         try
         {
             $response = $httpClient->request(Config::get('ldapi.requestMethod'), Config::get('ldapi.authUrl'), [
