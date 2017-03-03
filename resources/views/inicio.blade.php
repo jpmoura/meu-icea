@@ -5,24 +5,20 @@
 @endsection
 
 @section('descricao')
-    Bem-vindo {!! Auth::user()->nome !!}, você está na página inicial.
+    Bem-vindo {!! auth()->user()->nome !!}, você está na página inicial.
 @endsection
 
 @section('conteudo')
-
-    <div class="row">
-
-    </div>
-
     @if(!$errors->isEmpty())
-        {{  var_dump($errors) }}
         <div class="row">
-            <div class="text-center alert alert-dismissible alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Erro!</strong>
-                @foreach($errors->all() as $error)
-                    {{ $error }}
-                @endforeach
+            <div class="col-md-12">
+                <div class="text-center alert alert-dismissible alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times"></i></span></button>
+                    <strong>Erro!</strong>
+                    @foreach($errors->all() as $error)
+                        {{ $error }}
+                    @endforeach
+                </div>
             </div>
         </div>
     @endif
@@ -48,7 +44,7 @@
         <div class="col-md-6">
             <div class="box box-primary-ufop">
                 <div class="box-header text-center">
-                    <i class="fa fa-support"></i> Chamadas de Suporte
+                    <i class="fa fa-support"></i> Sistema de Chamadas de Suporte
                 </div>
                 <div class="box-body">
                     <div class="text-center">
