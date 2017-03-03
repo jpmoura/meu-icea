@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Encryption\Encrypter;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
@@ -37,7 +36,7 @@ class PagesController extends Controller
         $encrypter = new Encrypter(Config::get('reserva.chave'), Config::get('reserva.algoritmo'));
         $id = $encrypter->encrypt(Auth::id());
 
-        $httpClient = new Client();
+        $httpClient = new Client(['verify' => false]);
         try
         {
             $response = $httpClient->request(Config::get('reserva.tokenGenerateRequestMethod'), Config::get('reserva.tokenGenerateUrl'), [
@@ -46,11 +45,13 @@ class PagesController extends Controller
                 ],
             ]);
         }
-        catch (ClientException $ex) { // Erros relacionados ao cliente
+        catch (ClientException $ex)
+        { // Erros relacionados ao cliente
             return redirect()->back()->withErrors(['client' => $ex->getResponse()->getBody()->getContents()]);
         }
-        catch (RequestException $ex) { // Erros relacionados ao servidor
-            return redirect()->back()->withErrors(['server' => $ex->getResponse()->getBody()->getContents()]);
+        catch (RequestException $ex)
+        { // Erros relacionados ao servidor
+            return redirect()->back()->withErrors(['server' => $ex->getMessage()]);
         }
 
         $body = $response->getBody()->getContents(); // Obtém o corpo da resposta
