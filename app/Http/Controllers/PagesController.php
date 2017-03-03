@@ -54,8 +54,14 @@ class PagesController extends Controller
 
         $body = $response->getBody()->getContents(); // Obtém o corpo da resposta
 
+        /*
+         * Se o Sistema de Reserva responder 'quadro' então significa que é um aluno e então redireciona para a tela
+         * de seleção de recurso para visualizar o quadro. Se a resposta for diferente de 'quadro' então o conteúdo
+         * é o token de autenticação do usuário e ele é redirecionado para a URI de login do Sistema de Reserva.
+         */
+
         if($body == 'quadro') $redirection = config('reserva.quadroUrl'); // Redireciona para a seleção do quadro
-        else $redirection = config('reserva.tokenLoginUrl') . $body; // Redireciona para a url de login via token
+        else $redirection = config('reserva.tokenLoginUrl') . $body; // Redireciona para a url de login via token com o token como parâmetro
 
         return redirect()->away($redirection);
     }
