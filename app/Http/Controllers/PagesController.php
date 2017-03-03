@@ -6,8 +6,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Encryption\Encrypter;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 
 class PagesController extends Controller
 {
@@ -33,13 +31,13 @@ class PagesController extends Controller
     public function reserva()
     {
 
-        $encrypter = new Encrypter(Config::get('reserva.chave'), Config::get('reserva.algoritmo'));
-        $id = $encrypter->encrypt(Auth::id());
+        $encrypter = new Encrypter(config('reserva.chave'), config('reserva.algoritmo'));
+        $id = $encrypter->encrypt(auth()->id());
 
         $httpClient = new Client(['verify' => false]);
         try
         {
-            $response = $httpClient->request(Config::get('reserva.tokenGenerateRequestMethod'), Config::get('reserva.tokenGenerateUrl'), [
+            $response = $httpClient->request(config('reserva.tokenGenerateRequestMethod'), config('reserva.tokenGenerateUrl'), [
                 "headers" => [
                     "Meu-ICEA" => $id,
                 ],
@@ -56,8 +54,8 @@ class PagesController extends Controller
 
         $body = $response->getBody()->getContents(); // Obtém o corpo da resposta
 
-        if($body == 'quadro') $redirection = Config::get('reserva.quadroUrl'); // Redireciona para a seleção do quadro
-        else $redirection = Config::get('reserva.tokenLoginUrl') . $body; // Redireciona para a url de login via token
+        if($body == 'quadro') $redirection = config('reserva.quadroUrl'); // Redireciona para a seleção do quadro
+        else $redirection = config('reserva.tokenLoginUrl') . $body; // Redireciona para a url de login via token
 
         return redirect()->away($redirection);
     }
@@ -67,6 +65,6 @@ class PagesController extends Controller
      */
     public function sisnti()
     {
-        return redirect()->away(Config::get('sisnti.url'));
+        return redirect()->away(config('sisnti.url'));
     }
 }
